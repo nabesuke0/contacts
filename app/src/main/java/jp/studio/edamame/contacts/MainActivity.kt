@@ -2,9 +2,7 @@ package jp.studio.edamame.contacts
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.view.ViewPager
-import android.support.v4.view.ViewPager.OnPageChangeListener
+import jp.studio.edamame.contacts.views.all.AllContactsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +11,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val pagerAdapter = ContactsPagerAdapter(supportFragmentManager)
+        pagerAdapter.addFragment(AllContactsFragment())
+
         main_viewpager.adapter = pagerAdapter
         main_tab.setupWithViewPager(main_viewpager)
     }
