@@ -1,7 +1,5 @@
 package jp.studio.edamame.contacts.views.all
 
-import android.os.Bundle
-import android.support.v4.app.Fragment
 import jp.studio.edamame.contacts.R
 import jp.studio.edamame.contacts.views.ViewPagerFragment
 
@@ -16,5 +14,6 @@ class AllContactsFragment: ViewPagerFragment() {
     override fun layoutId(): Int {
         return R.layout.fragment_allcontacts
     }
+
 
 }
