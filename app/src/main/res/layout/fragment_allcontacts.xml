@@ -7,7 +7,10 @@
     <GridView
         android:id="@+id/allcontacts_grid"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:horizontalSpacing="2dp"
+        android:verticalSpacing="2dp">
     </GridView>
 
 </FrameLayout>
