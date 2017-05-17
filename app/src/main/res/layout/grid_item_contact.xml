@@ -11,6 +11,7 @@
         android:layout_alignParentTop="true"
         android:layout_above="@+id/grid_item_vertical_separate">
         <ImageView
+            android:id="@+id/grid_item_image"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
