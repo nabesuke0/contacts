@@ -3,6 +3,7 @@ package jp.studio.edamame.contacts.views.all
 import android.os.Bundle
 import android.view.View
 import jp.studio.edamame.contacts.R
+import jp.studio.edamame.contacts.provider.ContactsProvider
 import jp.studio.edamame.contacts.views.ViewPagerFragment
 
 /**
@@ -23,6 +24,8 @@ class AllContactsFragment: ViewPagerFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = AllContactsViewModel()
+
+        ContactsProvider.query()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
