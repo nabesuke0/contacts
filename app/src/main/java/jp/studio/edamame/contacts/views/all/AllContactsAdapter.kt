@@ -7,8 +7,6 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import jp.studio.edamame.contacts.model.Contact
-import android.support.v7.widget.RecyclerView.ViewHolder
-import android.support.design.widget.CoordinatorLayout.Behavior.setTag
 import android.view.LayoutInflater
 import jp.studio.edamame.contacts.R
 
@@ -20,9 +18,11 @@ class AllContactsAdapter(context: Context, contacts: Array<Contact>) : BaseAdapt
     val mContacts: Array<Contact> = contacts
     val mInflater: LayoutInflater = LayoutInflater.from(context)
 
-    private class ViewHolder() {
-        var imageView: ImageView? = null
-        var textView: TextView? = null
+    companion object {
+        private class ViewHolder {
+            var imageView: ImageView? = null
+            var textView: TextView? = null
+        }
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
