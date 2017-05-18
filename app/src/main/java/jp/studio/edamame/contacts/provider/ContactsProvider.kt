@@ -4,6 +4,7 @@ import android.database.DatabaseUtils
 import android.provider.ContactsContract
 import jp.studio.edamame.contacts.ContactsApplication
 import android.util.Log
+import jp.studio.edamame.contacts.model.Contact
 
 
 /**
@@ -34,6 +35,23 @@ class ContactsProvider {
             )
 
             Log.e("ContactsProvider", DatabaseUtils.dumpCursorToString(cursor))
+
+            val mimeTypeIdx = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE)
+            val idIdx = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+            val nameIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
+            val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
+
+            val contactMap: Map<Long, Contact> = emptyMap()
+
+            while(cursor.moveToNext()) {
+                val id = cursor.getLong(idIdx)
+                var contact = contactMap[id]
+
+                if (contact == null) {
+                    contact = Contact(id)
+                }
+            }
         }
     }
 }
