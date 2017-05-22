@@ -2,9 +2,12 @@ package jp.studio.edamame.contacts.provider
 
 import android.database.DatabaseUtils
 import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds
 import jp.studio.edamame.contacts.ContactsApplication
 import android.util.Log
 import jp.studio.edamame.contacts.model.Contact
+import jp.studio.edamame.contacts.model.MailAddress
+import jp.studio.edamame.contacts.model.Phone
 
 
 /**
@@ -26,7 +29,8 @@ class ContactsProvider {
         var sortOrder = ContactsContract.Contacts.SORT_KEY_ALTERNATIVE
 
         fun query() {
-            val cursor = ContactsApplication.getApp().contentResolver.query(
+            val application = ContactsApplication.getApp()
+            val cursor = application.contentResolver.query(
                     ContactsContract.CommonDataKinds.Contactables.CONTENT_URI,
                     projection,
                     selection,
@@ -35,6 +39,8 @@ class ContactsProvider {
             )
 
             Log.e("ContactsProvider", DatabaseUtils.dumpCursorToString(cursor))
+
+            val res = application.resources
 
             val mimeTypeIdx = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE)
             val idIdx = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)
@@ -46,10 +52,25 @@ class ContactsProvider {
 
             while(cursor.moveToNext()) {
                 val id = cursor.getLong(idIdx)
-                var contact = contactMap[id]
+                val mimeType = cursor.getString(mimeTypeIdx)
+                val type = cursor.getInt(typeIdx)
 
-                if (contact == null) {
-                    contact = Contact(id)
+                var contact = contactMap[id]?.let { it } ?: Contact(id, cursor.getString(nameIdx))
+
+                when (mimeType) {
+                    CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> {
+                        val typeLabel = ContactsContract.CommonDataKinds.Phone.getTypeLabel(res, type, "") as String
+                        val phone = Phone(cursor.getString(dataIdx), typeLabel)
+
+                        contact.phoneList.add(phone)
+                    }
+
+                    CommonDataKinds.Email.CONTENT_ITEM_TYPE -> {
+                        val typeLabel = ContactsContract.CommonDataKinds.Email.getTypeLabel(res, type, "") as String
+                        val emailAddress = MailAddress(cursor.getString(dataIdx), typeLabel)
+
+                        contact.emailAddresList.add(emailAddress)
+                    }
                 }
             }
         }

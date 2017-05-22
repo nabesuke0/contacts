@@ -19,4 +19,10 @@ enum class ContactItemType(val type: Int) {
             Other -> return "Other"
         }
     }
+
+    companion object {
+        fun convertEmailType(type: Int) {
+            
+        }
+    }
 }
