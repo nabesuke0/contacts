@@ -24,8 +24,9 @@ class AllContactsFragment: ViewPagerFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = AllContactsViewModel()
-
-        ContactsProvider.query()
+        // TODO: 取得テスト用
+        // TODO: パーミッションリクエストが必要
+        ContactsProvider.queryAll()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {

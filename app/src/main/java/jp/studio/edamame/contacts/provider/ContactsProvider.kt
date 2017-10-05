@@ -28,7 +28,7 @@ class ContactsProvider {
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
         var sortOrder = ContactsContract.Contacts.SORT_KEY_ALTERNATIVE
 
-        fun query() {
+        fun queryAll() : MutableMap<Long, Contact> {
             val application = ContactsApplication.getApp()
             val cursor = application.contentResolver.query(
                     ContactsContract.CommonDataKinds.Contactables.CONTENT_URI,
@@ -48,14 +48,20 @@ class ContactsProvider {
             val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
             val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
 
-            val contactMap: Map<Long, Contact> = emptyMap()
+            val contactMap: MutableMap<Long, Contact> = mutableMapOf()
 
             while(cursor.moveToNext()) {
                 val id = cursor.getLong(idIdx)
                 val mimeType = cursor.getString(mimeTypeIdx)
                 val type = cursor.getInt(typeIdx)
 
-                var contact = contactMap[id]?.let { it } ?: Contact(id, cursor.getString(nameIdx))
+//                val contact = contactMap[id]?.let { it } ?: Contact(id, cursor.getString(nameIdx))
+                val contact =
+                        if (contactMap.containsKey(id)) contactMap[id]!!
+                        else {
+                            contactMap[id] = Contact(id, cursor.getString(nameIdx))
+                            contactMap[id]!!
+                        }
 
                 when (mimeType) {
                     CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> {
@@ -71,8 +77,12 @@ class ContactsProvider {
 
                         contact.emailAddresList.add(emailAddress)
                     }
+
+                    // TODO: その他の情報を取得
                 }
             }
+
+            return contactMap
         }
     }
 }
