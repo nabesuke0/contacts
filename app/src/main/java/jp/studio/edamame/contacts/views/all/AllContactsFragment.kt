@@ -7,7 +7,7 @@ import jp.studio.edamame.contacts.provider.ContactsProvider
 import jp.studio.edamame.contacts.views.ViewPagerFragment
 
 /**
- * Created by Watanabe@Neopa on 2017/05/16.
+ * Created by Watanabe on 2017/05/16.
  */
 class AllContactsFragment: ViewPagerFragment() {
     lateinit var viewModel: AllContactsViewModel
@@ -24,9 +24,6 @@ class AllContactsFragment: ViewPagerFragment() {
         super.onCreate(savedInstanceState)
 
         viewModel = AllContactsViewModel()
-        // TODO: 取得テスト用
-        // TODO: パーミッションリクエストが必要
-        ContactsProvider.queryAll()
     }
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
