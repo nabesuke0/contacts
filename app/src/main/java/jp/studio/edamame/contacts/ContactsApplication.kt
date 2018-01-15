@@ -1,9 +1,10 @@
 package jp.studio.edamame.contacts
 
 import android.app.Application
+import timber.log.Timber
 
 /**
- * Created by Watanabe@Neopa on 2017/05/12.
+ * Created by Watanabe on 2017/05/12.
  */
 class ContactsApplication : Application() {
     companion object {
@@ -15,6 +16,11 @@ class ContactsApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        if (BuildConfig.DEBUG) {
+            // Log出力
+            Timber.plant(Timber.DebugTree())
+        }
 
         ContactsApplication.self = this
     }
