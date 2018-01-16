@@ -40,6 +40,9 @@ class AllContactsAdapter(contacts: MutableList<Contact>)
 
         fun bindData(contact: Contact) {
             textView.text = contact.displayName
+            contact.getPhoto().subscribe { bitmap ->
+                imageView.setImageBitmap(bitmap)
+            }
         }
     }
 }

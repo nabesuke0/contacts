@@ -1,6 +1,8 @@
 package jp.studio.edamame.contacts.provider
 
+import android.content.ContentUris
 import android.database.DatabaseUtils
+import android.net.Uri
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds
 import jp.studio.edamame.contacts.ContactsApplication
@@ -9,6 +11,8 @@ import jp.studio.edamame.contacts.model.Contact
 import jp.studio.edamame.contacts.model.MailAddress
 import jp.studio.edamame.contacts.model.Phone
 import timber.log.Timber
+import java.io.ByteArrayInputStream
+import java.io.InputStream
 
 
 /**
@@ -51,7 +55,6 @@ class ContactsProvider {
             val nameIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
             val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
-            val photoIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.PHOTO_THUMBNAIL_URI)
 
             val contactMap: MutableMap<Long, Contact> = mutableMapOf()
 
@@ -66,10 +69,6 @@ class ContactsProvider {
                             contactMap[id] = Contact(id, cursor.getString(nameIdx))
                             contactMap[id]!!
                         }
-
-                if (contact.photoUri == null) {
-                    contact.photoUri = cursor.getString(photoIdx)
-                }
 
                 when (mimeType) {
                     CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> {
@@ -89,6 +88,23 @@ class ContactsProvider {
             }
 
             return contactMap.values.sortedBy { it.displayName }.toMutableList()
+        }
+
+        fun openPhoto(contactId: Long): InputStream? {
+            val contactUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contactId)
+            val photoUri = Uri.withAppendedPath(contactUri, ContactsContract.Contacts.Photo.CONTENT_DIRECTORY)
+            val cursor = ContactsApplication.getApp().contentResolver.query(photoUri,
+                    arrayOf(ContactsContract.Contacts.Photo.PHOTO), null, null, null) ?: return null
+
+            cursor.use { cursor ->
+                if (cursor.moveToFirst()) {
+                    val data = cursor.getBlob(0)
+                    if (data != null) {
+                        return ByteArrayInputStream(data)
+                    }
+                }
+            }
+            return null
         }
     }
 }
