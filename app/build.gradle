@@ -43,6 +43,8 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxjava:2.1.5'
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     kapt 'com.android.databinding:compiler:3.0.1'
+
+    compile 'de.hdodenhof:circleimageview:2.2.0'
 }
 
 repositories {
