@@ -28,7 +28,7 @@ class ContactsProvider {
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
         var sortOrder = ContactsContract.Contacts.SORT_KEY_ALTERNATIVE
 
-        fun queryAll() : MutableMap<Long, Contact> {
+        fun queryAll() : MutableList<Contact> {
             val application = ContactsApplication.getApp()
             val cursor = application.contentResolver.query(
                     ContactsContract.CommonDataKinds.Contactables.CONTENT_URI,
@@ -82,7 +82,7 @@ class ContactsProvider {
                 }
             }
 
-            return contactMap
+            return contactMap.values.sortedBy { it.displayName }.toMutableList()
         }
     }
 }

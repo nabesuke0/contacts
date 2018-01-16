@@ -2,4 +2,5 @@
     <string name="app_name">Contacts</string>
 
     <string name="permission_request_message">連絡先へのアクセスを許可していただかないとアプリを使用できません。</string>
+    <string name="grid_item_contact_image">User Image</string>
 </resources>
