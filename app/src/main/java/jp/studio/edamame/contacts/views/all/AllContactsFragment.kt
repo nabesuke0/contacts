@@ -41,7 +41,7 @@ class AllContactsFragment: ViewPagerFragment() {
     private fun initializeRecyclerView(viewModel : AllContactsViewModel) {
         allcontacts_grid.setHasFixedSize(true)
 
-        val adapter = AllContactsAdapter(viewModel.contacts, viewModel.viewItems, this.context)
+        val adapter = AllContactsAdapter(viewModel.viewItems, this.context)
         allcontacts_grid.layoutManager = adapter.gridLayoutManager
         allcontacts_grid.adapter = adapter
     }

@@ -13,7 +13,7 @@ class AllContactsViewModel {
     init {
         var categoryKey = ""
         contacts.forEach { contact ->
-            var sortKey = contact.sortKey.substring(0..1)
+            var sortKey = contact.sortKey.substring(0..0)
             if (categoryKey != sortKey) {
                 categoryKey = sortKey
                 viewItems.add(RecyclerItemCategory(sortKey))
