@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="180dp"
+    android:layout_width="wrap_content"
     android:layout_height="100dp"
     android:background="@android:color/holo_blue_dark"
     android:layout_margin="5dp">
@@ -54,6 +54,7 @@
                 app:civ_border_color="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/grid_item_icons_horizontal_center"
                 android:src="@drawable/grid_user_mail"
                 />
