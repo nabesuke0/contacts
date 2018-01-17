@@ -8,4 +8,18 @@ import jp.studio.edamame.contacts.provider.ContactsProvider
  */
 class AllContactsViewModel {
     val contacts: MutableList<Contact> = ContactsProvider.queryAll()
+    val viewItems : MutableList<ContactsRecyclerItemable> = mutableListOf()
+
+    init {
+        var categoryKey = ""
+        contacts.forEach { contact ->
+            var sortKey = contact.sortKey.substring(0..1)
+            if (categoryKey != sortKey) {
+                categoryKey = sortKey
+                viewItems.add(RecyclerItemCategory(sortKey))
+            }
+
+            viewItems.add(RecyclerItemContact(contact))
+        }
+    }
 }
