@@ -1,5 +1,7 @@
 package jp.studio.edamame.contacts.views.all
 
+import android.content.Context
+import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
@@ -14,10 +16,21 @@ import timber.log.Timber
 /**
  * Created by Watanabe on 2017/05/17.
  */
-class AllContactsAdapter(contacts: MutableList<Contact>)
+class AllContactsAdapter(
+        var mContacts: MutableList<Contact>,
+        var viewItems : MutableList<ContactsRecyclerItemable>,
+        context: Context)
     : RecyclerView.Adapter<AllContactsAdapter.ViewHolder>()
 {
-    val mContacts: MutableList<Contact> = contacts
+    val gridLayoutManager = GridLayoutManager(context, 2)
+
+    init {
+        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return 2// if (viewItems[position].itemType == ContactsViewItemType.CATEGORY) 1 else 2
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent!!.context).inflate(R.layout.grid_item_contact, parent, false)
