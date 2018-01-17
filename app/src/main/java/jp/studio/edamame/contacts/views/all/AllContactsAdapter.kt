@@ -1,16 +1,14 @@
 package jp.studio.edamame.contacts.views.all
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import jp.studio.edamame.contacts.model.Contact
 import android.view.LayoutInflater
-import jp.studio.edamame.contacts.ContactsApplication
 import jp.studio.edamame.contacts.R
+import timber.log.Timber
 
 
 /**
@@ -40,9 +38,14 @@ class AllContactsAdapter(contacts: MutableList<Contact>)
 
         fun bindData(contact: Contact) {
             textView.text = contact.displayName
-            contact.getPhoto().subscribe { bitmap ->
-                imageView.setImageBitmap(bitmap)
-            }
+
+            contact.getPhoto().subscribe(
+                    { bitmap ->
+                        imageView.setImageBitmap(bitmap)
+                    },
+                    { e ->
+                        Timber.d(e.localizedMessage)
+                    })
         }
     }
 }
