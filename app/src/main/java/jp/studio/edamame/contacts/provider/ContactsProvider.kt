@@ -16,7 +16,7 @@ import java.io.InputStream
 
 
 /**
- * Created by Watanabe@Neopa on 2017/05/17.
+ * Created by Watanabe on 2017/05/17.
  */
 class ContactsProvider {
     companion object {
@@ -97,9 +97,9 @@ class ContactsProvider {
             val cursor = ContactsApplication.getApp().contentResolver.query(photoUri,
                     arrayOf(ContactsContract.Contacts.Photo.PHOTO), null, null, null) ?: return null
 
-            cursor.use { cursor ->
-                if (cursor.moveToFirst()) {
-                    val data = cursor.getBlob(0)
+            cursor.use { _cursor ->
+                if (_cursor.moveToFirst()) {
+                    val data = _cursor.getBlob(0)
                     if (data != null) {
                         return ByteArrayInputStream(data)
                     }
