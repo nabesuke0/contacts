@@ -10,6 +10,7 @@
         android:layout_height="match_parent"
         android:layout_marginStart="@dimen/grid_section_padding_title"
         android:layout_marginEnd="@dimen/grid_section_padding_title"
+        android:gravity="center_vertical"
         android:singleLine="true"
         android:textAllCaps="true"
         android:textSize="16sp"
