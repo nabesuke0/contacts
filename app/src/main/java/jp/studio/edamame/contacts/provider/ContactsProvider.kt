@@ -20,21 +20,21 @@ import java.io.InputStream
  */
 class ContactsProvider {
     companion object {
-        var projection = arrayOf(
+        private var projection = arrayOf(
                 ContactsContract.Data.MIMETYPE,
                 ContactsContract.Data.CONTACT_ID,
                 ContactsContract.Contacts.DISPLAY_NAME,
-                ContactsContract.Contacts.PHOTO_THUMBNAIL_URI,
+                ContactsContract.Contacts.SORT_KEY_PRIMARY,
                 ContactsContract.CommonDataKinds.Contactables.DATA,
                 ContactsContract.CommonDataKinds.Contactables.TYPE
         )
-        var selection = ContactsContract.Data.MIMETYPE + " in (?, ?)"
+        private var selection = ContactsContract.Data.MIMETYPE + " in (?, ?)"
 
-        var selectionArgs = arrayOf(
+        private var selectionArgs = arrayOf(
                 ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE,
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
 
-        var sortOrder = ContactsContract.Contacts.SORT_KEY_ALTERNATIVE
+        private var sortOrder = ContactsContract.Contacts.SORT_KEY_PRIMARY
 
         fun queryAll() : MutableList<Contact> {
             val application = ContactsApplication.getApp()
@@ -55,6 +55,7 @@ class ContactsProvider {
             val nameIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
             val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
             val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
+            val sortKeyIdx = cursor.getColumnIndex(ContactsContract.Contacts.SORT_KEY_PRIMARY)
 
             val contactMap: MutableMap<Long, Contact> = mutableMapOf()
 
@@ -66,7 +67,7 @@ class ContactsProvider {
                 val contact =
                         if (contactMap.containsKey(id)) contactMap[id]!!
                         else {
-                            contactMap[id] = Contact(id, cursor.getString(nameIdx))
+                            contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx))
                             contactMap[id]!!
                         }
 
