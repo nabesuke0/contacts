@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     private fun showConfirmationDialog() {
         AlertDialog.Builder(this)
                 .setMessage(R.string.permission_request_message)
-                .setPositiveButton(android.R.string.ok) {dialog, which ->
+                .setPositiveButton(android.R.string.ok) { _, _ ->
                     this.finish()
                 }
     }
