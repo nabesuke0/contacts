@@ -44,7 +44,9 @@ dependencies {
     compile 'com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar'
     kapt 'com.android.databinding:compiler:3.0.1'
 
+    // layout
     compile 'de.hdodenhof:circleimageview:2.2.0'
+    compile 'com.android.support:percent:26.1.0'
 }
 
 repositories {
