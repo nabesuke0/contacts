@@ -20,7 +20,7 @@ import java.io.InputStream
  */
 class ContactsProvider {
     companion object {
-        private var projection = arrayOf(
+        private var dataProjection = arrayOf(
                 ContactsContract.Data.MIMETYPE,
                 ContactsContract.Data.CONTACT_ID,
                 ContactsContract.Contacts.DISPLAY_NAME,
@@ -38,26 +38,54 @@ class ContactsProvider {
 
         fun queryAll() : MutableList<Contact> {
             val application = ContactsApplication.getApp()
-            val cursor = application.contentResolver.query(
-                    ContactsContract.CommonDataKinds.Contactables.CONTENT_URI,
-                    projection,
-                    selection,
-                    selectionArgs,
+
+            var cursor = application.contentResolver.query(
+                    ContactsContract.Contacts.CONTENT_URI,
+                    arrayOf(ContactsContract.Contacts._ID,
+                            ContactsContract.Contacts.DISPLAY_NAME,
+                            ContactsContract.Contacts.SORT_KEY_PRIMARY),
+                    null,
+                    null,
                     sortOrder
             )
 
             Log.e("ContactsProvider", DatabaseUtils.dumpCursorToString(cursor))
 
-            val res = application.resources
-
-            val mimeTypeIdx = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE)
-            val idIdx = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)
-            val nameIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
-            val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
-            val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
-            val sortKeyIdx = cursor.getColumnIndex(ContactsContract.Contacts.SORT_KEY_PRIMARY)
+            var idIdx = cursor.getColumnIndex(ContactsContract.Contacts._ID)
+            var nameIdx = cursor.getColumnIndex("display_name")
+            var sortKeyIdx = cursor.getColumnIndex(ContactsContract.Contacts.SORT_KEY_PRIMARY)
 
             val contactMap: MutableMap<Long, Contact> = mutableMapOf()
+
+            while(cursor.moveToNext()) {
+                Timber.d("==================")
+                Timber.d("%d", cursor.getLong(idIdx))
+                Timber.d(cursor.getString(nameIdx))
+                Timber.d(cursor.getString(sortKeyIdx))
+
+                val id = cursor.getLong(idIdx)
+                contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx))
+            }
+            cursor.close()
+
+            // Contactのデータを取得
+            cursor = application.contentResolver.query(
+                    ContactsContract.CommonDataKinds.Contactables.CONTENT_URI,
+                    dataProjection,
+                    selection,
+                    selectionArgs,
+                    sortOrder
+            )
+
+            val res = application.resources
+
+            idIdx = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID)
+            nameIdx = cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)
+            sortKeyIdx = cursor.getColumnIndex(ContactsContract.Contacts.SORT_KEY_PRIMARY)
+
+            val mimeTypeIdx = cursor.getColumnIndex(ContactsContract.Data.MIMETYPE)
+            val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
+            val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
 
             while(cursor.moveToNext()) {
                 val id = cursor.getLong(idIdx)
