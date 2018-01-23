@@ -43,7 +43,8 @@ class ContactsProvider {
                     ContactsContract.Contacts.CONTENT_URI,
                     arrayOf(ContactsContract.Contacts._ID,
                             ContactsContract.Contacts.DISPLAY_NAME,
-                            ContactsContract.Contacts.SORT_KEY_PRIMARY),
+                            ContactsContract.Contacts.SORT_KEY_PRIMARY,
+                            ContactsContract.Contacts.PHOTO_URI),
                     null,
                     null,
                     sortOrder
@@ -55,6 +56,8 @@ class ContactsProvider {
             var nameIdx = cursor.getColumnIndex("display_name")
             var sortKeyIdx = cursor.getColumnIndex(ContactsContract.Contacts.SORT_KEY_PRIMARY)
 
+            val photoIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
+
             val contactMap: MutableMap<Long, Contact> = mutableMapOf()
 
             while(cursor.moveToNext()) {
@@ -64,7 +67,8 @@ class ContactsProvider {
                 Timber.d(cursor.getString(sortKeyIdx))
 
                 val id = cursor.getLong(idIdx)
-                contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx))
+                val photoUri = cursor.getString(photoIdx) ?: ""
+                contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx), photoUri)
             }
             cursor.close()
 
@@ -111,7 +115,7 @@ class ContactsProvider {
                         val typeLabel = ContactsContract.CommonDataKinds.Email.getTypeLabel(res, type, "") as String
                         val emailAddress = MailAddress(cursor.getString(dataIdx), typeLabel)
 
-                        contact.emailAddressList.add(emailAddress)
+                        contact.mailList.add(emailAddress)
                     }
                 }
             }

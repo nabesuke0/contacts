@@ -84,7 +84,7 @@ class ContactsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         if (item.contact.phoneList.count() > 0) {
             phoneImage.visibility = View.VISIBLE
         }
-        if (item.contact.emailAddressList.count() > 0) {
+        if (item.contact.mailList.count() > 0) {
             mailImage.visibility = View.VISIBLE
         }
 

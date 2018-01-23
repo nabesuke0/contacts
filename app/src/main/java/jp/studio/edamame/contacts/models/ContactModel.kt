@@ -1,7 +1,5 @@
 package jp.studio.edamame.contacts.models
 
-import android.graphics.Bitmap
-import io.reactivex.Maybe
 import io.reactivex.subjects.BehaviorSubject
 import jp.studio.edamame.contacts.entities.Contact
 
@@ -12,17 +10,15 @@ class ContactModel(contact: Contact) {
     var id: BehaviorSubject<Long> = BehaviorSubject.createDefault(contact.id)
     var displayName: BehaviorSubject<String> = BehaviorSubject.createDefault(contact.displayName)
     var sortKey : BehaviorSubject<String> = BehaviorSubject.createDefault(contact.sortKey)
+    var photoUri: BehaviorSubject<String> = BehaviorSubject.createDefault(contact.photoUri)
     val phoneList: BehaviorSubject<MutableList<PhoneModel>> = BehaviorSubject.createDefault(
             contact.phoneList.map {
                 PhoneModel(it)
             }.toMutableList()
     )
-    val emailAddressList: BehaviorSubject<MutableList<MailModel>> = BehaviorSubject.createDefault(
-            contact.emailAddressList.map {
+    val mailList: BehaviorSubject<MutableList<MailModel>> = BehaviorSubject.createDefault(
+            contact.mailList.map {
                 MailModel(it)
             }.toMutableList()
     )
-
-    private var photo: Maybe<Bitmap?> = Maybe.create(null)
-
 }

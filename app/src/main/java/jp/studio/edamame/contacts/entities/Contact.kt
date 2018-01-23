@@ -9,28 +9,28 @@ import jp.studio.edamame.contacts.provider.ContactsProvider
 /**
  * Created by Watanabe@Neopa on 2017/05/17.
  */
-class Contact(var id: Long, var displayName: String, var sortKey : String) {
+class Contact(var id: Long, var displayName: String, var sortKey : String, var photoUri: String = "") {
     val phoneList: MutableList<Phone> = mutableListOf()
-    val emailAddressList: MutableList<MailAddress> = mutableListOf()
+    val mailList: MutableList<MailAddress> = mutableListOf()
 
     private var photo: Bitmap? = null
 
     fun getPhoto() : Maybe<Bitmap> {
-        return Maybe.create { emmitter ->
+        return Maybe.create { emitter ->
             this.photo?.let {
-                emmitter.onSuccess(it)
+                emitter.onSuccess(it)
                 return@create
             }
 
             ContactsProvider.openPhoto(this.id)?.let {
                 val photo = BitmapFactory.decodeStream(it)
                 this.photo = photo
-                emmitter.onSuccess(photo)
+                emitter.onSuccess(photo)
 
                 return@create
             }
 
-            emmitter.onComplete()
+            emitter.onComplete()
         }
     }
 }
