@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import jp.studio.edamame.contacts.R
 import jp.studio.edamame.contacts.views.ViewPagerFragment
 import kotlinx.android.synthetic.main.fragment_allcontacts.*
+import timber.log.Timber
 
 /**
  * Created by Watanabe on 2017/05/16.
@@ -41,7 +42,10 @@ class AllContactsFragment: ViewPagerFragment() {
     private fun initializeRecyclerView(viewModel : AllContactsViewModel) {
         allcontacts_grid.setHasFixedSize(true)
 
-        val adapter = AllContactsAdapter(viewModel.viewItems, this.context)
+        val adapter = AllContactsAdapter(viewModel.viewItems, this.context) { item ->
+            Timber.d("item name = %s", item.contact.displayName)
+        }
+
         allcontacts_grid.layoutManager = adapter.gridLayoutManager
         allcontacts_grid.adapter = adapter
     }

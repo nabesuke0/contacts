@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.view.LayoutInflater
+import android.widget.RelativeLayout
 import jp.studio.edamame.contacts.R
 import timber.log.Timber
 
@@ -17,7 +18,8 @@ import timber.log.Timber
  */
 class AllContactsAdapter(
         var viewItems : MutableList<ContactsRecyclerItemable>,
-        context: Context)
+        context: Context,
+        private var itemClick: ((RecyclerItemContact) -> Unit)? = null)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
     val gridLayoutManager = GridLayoutManager(context, 2)
@@ -56,7 +58,11 @@ class AllContactsAdapter(
             }
             ContactsViewItemType.CONTACTS -> {
                 val viewHolder = holder as ContactsViewHolder
-                viewHolder.bindItem(item as RecyclerItemContact)
+                val contactItem = item as RecyclerItemContact
+                viewHolder.bindItem(contactItem)
+                viewHolder.layout.setOnClickListener {
+                    itemClick?.invoke(contactItem)
+                }
             }
         }
     }
@@ -67,11 +73,20 @@ class AllContactsAdapter(
 }
 
 class ContactsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    var imageView: ImageView = view.findViewById(R.id.grid_item_image)
-    var textView: TextView = view.findViewById(R.id.grid_item_name)
+    var layout: RelativeLayout = view.findViewById(R.id.grid_item_contact_layout)
+    private var imageView: ImageView = view.findViewById(R.id.grid_item_image)
+    private var textView: TextView = view.findViewById(R.id.grid_item_name)
+    private var phoneImage: ImageView = view.findViewById(R.id.grid_item_image_phone)
+    private var mailImage: ImageView = view.findViewById(R.id.grid_item_image_mail)
 
     fun bindItem(item : RecyclerItemContact) {
         textView.text = item.contact.displayName
+        if (item.contact.phoneList.count() > 0) {
+            phoneImage.visibility = View.VISIBLE
+        }
+        if (item.contact.emailAddressList.count() > 0) {
+            mailImage.visibility = View.VISIBLE
+        }
 
         item.contact.getPhoto().subscribe(
                 { bitmap ->
@@ -84,7 +99,7 @@ class ContactsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 }
 
 class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    var textView: TextView = view.findViewById(R.id.grid_section_title)
+    private var textView: TextView = view.findViewById(R.id.grid_section_title)
 
     fun bindItem(item : RecyclerItemCategory) {
         textView.text = item.categoryName
