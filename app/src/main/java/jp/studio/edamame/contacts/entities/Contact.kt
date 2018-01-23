@@ -1,4 +1,4 @@
-package jp.studio.edamame.contacts.entity
+package jp.studio.edamame.contacts.entities
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

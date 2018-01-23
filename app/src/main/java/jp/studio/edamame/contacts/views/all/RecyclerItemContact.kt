@@ -1,6 +1,6 @@
 package jp.studio.edamame.contacts.views.all
 
-import jp.studio.edamame.contacts.entity.Contact
+import jp.studio.edamame.contacts.entities.Contact
 
 /**
  * Created by Watanabe on 2018/01/17.

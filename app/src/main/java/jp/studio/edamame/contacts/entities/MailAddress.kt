@@ -1,7 +1,7 @@
-package jp.studio.edamame.contacts.entity
+package jp.studio.edamame.contacts.entities
 
 /**
- * Created by Watanabe@Neopa on 2017/05/18.
+ * Created by Watanabe on 2017/05/18.
  */
 class MailAddress(mailAddress: String, type: String) {
     var mailAddress = mailAddress

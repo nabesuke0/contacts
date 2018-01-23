@@ -1,7 +1,7 @@
 package jp.studio.edamame.contacts.views.all
 
 import jp.studio.edamame.contacts.extensions.katakanaToHiragana
-import jp.studio.edamame.contacts.entity.Contact
+import jp.studio.edamame.contacts.entities.Contact
 import jp.studio.edamame.contacts.provider.ContactsProvider
 
 /**
