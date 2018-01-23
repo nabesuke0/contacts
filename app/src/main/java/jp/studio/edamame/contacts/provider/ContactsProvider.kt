@@ -61,11 +61,6 @@ class ContactsProvider {
             val contactMap: MutableMap<Long, Contact> = mutableMapOf()
 
             while(cursor.moveToNext()) {
-                Timber.d("==================")
-                Timber.d("%d", cursor.getLong(idIdx))
-                Timber.d(cursor.getString(nameIdx))
-                Timber.d(cursor.getString(sortKeyIdx))
-
                 val id = cursor.getLong(idIdx)
                 val photoUri = cursor.getString(photoIdx) ?: ""
                 contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx), photoUri)
