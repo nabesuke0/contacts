@@ -7,9 +7,9 @@ import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds
 import jp.studio.edamame.contacts.ContactsApplication
 import android.util.Log
-import jp.studio.edamame.contacts.model.Contact
-import jp.studio.edamame.contacts.model.MailAddress
-import jp.studio.edamame.contacts.model.Phone
+import jp.studio.edamame.contacts.entity.Contact
+import jp.studio.edamame.contacts.entity.MailAddress
+import jp.studio.edamame.contacts.entity.Phone
 import timber.log.Timber
 import java.io.ByteArrayInputStream
 import java.io.InputStream

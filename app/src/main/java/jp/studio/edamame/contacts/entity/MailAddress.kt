@@ -1,4 +1,4 @@
-package jp.studio.edamame.contacts.model
+package jp.studio.edamame.contacts.entity
 
 /**
  * Created by Watanabe@Neopa on 2017/05/18.

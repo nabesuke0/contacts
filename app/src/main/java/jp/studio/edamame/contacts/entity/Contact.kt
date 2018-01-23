@@ -1,9 +1,8 @@
-package jp.studio.edamame.contacts.model
+package jp.studio.edamame.contacts.entity
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import io.reactivex.Maybe
-import io.reactivex.Single
 import jp.studio.edamame.contacts.provider.ContactsProvider
 
 
