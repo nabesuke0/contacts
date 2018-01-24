@@ -82,7 +82,7 @@ class ContactsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val disposable = CompositeDisposable()
 
     fun bindItem(item : ContactThumbnailViewModel) {
-        imageView.setImageResource(R.drawable.grid_user_icon)
+        imageView.setImageResource(R.drawable.user_icon_default)
 
         disposable.addAll(
                 item.rx_displayName.subscribe { name ->
