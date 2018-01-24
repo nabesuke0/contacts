@@ -9,8 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.view.LayoutInflater
 import android.widget.RelativeLayout
+import io.reactivex.disposables.CompositeDisposable
 import jp.studio.edamame.contacts.R
-import timber.log.Timber
 
 
 /**
@@ -19,7 +19,7 @@ import timber.log.Timber
 class AllContactsAdapter(
         var viewItems : MutableList<ContactsRecyclerItemable>,
         context: Context,
-        private var itemClick: ((RecyclerItemContact) -> Unit)? = null)
+        private var itemClick: ((ContactThumbnailViewModel) -> Unit)? = null)
     : RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
     val gridLayoutManager = GridLayoutManager(context, 2)
@@ -54,11 +54,11 @@ class AllContactsAdapter(
         when(item.itemType) {
             ContactsViewItemType.CATEGORY -> {
                 val viewHolder = holder as CategoryViewHolder
-                viewHolder.bindItem(item as RecyclerItemCategory)
+                viewHolder.bindItem(item as CategoryItemViewModel)
             }
             ContactsViewItemType.CONTACTS -> {
                 val viewHolder = holder as ContactsViewHolder
-                val contactItem = item as RecyclerItemContact
+                val contactItem = item as ContactThumbnailViewModel
                 viewHolder.bindItem(contactItem)
                 viewHolder.layout.setOnClickListener {
                     itemClick?.invoke(contactItem)
@@ -79,21 +79,25 @@ class ContactsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private var phoneImage: ImageView = view.findViewById(R.id.grid_item_image_phone)
     private var mailImage: ImageView = view.findViewById(R.id.grid_item_image_mail)
 
-    fun bindItem(item : RecyclerItemContact) {
-        textView.text = item.contact.displayName
-        if (item.contact.phoneList.count() > 0) {
-            phoneImage.visibility = View.VISIBLE
-        }
-        if (item.contact.mailList.count() > 0) {
-            mailImage.visibility = View.VISIBLE
-        }
+    private val disposable = CompositeDisposable()
 
-        item.contact.getPhoto().subscribe(
-                { bitmap ->
-                    imageView.setImageBitmap(bitmap)
+    fun bindItem(item : ContactThumbnailViewModel) {
+        imageView.setImageResource(R.drawable.grid_user_icon)
+
+        disposable.addAll(
+                item.rx_displayName.subscribe { name ->
+                    textView.text = name
                 },
-                { e ->
-                    Timber.d(e.localizedMessage)
+                item.hasPhoneNumber.subscribe { hasNumber ->
+                    phoneImage.visibility = if (hasNumber) View.VISIBLE else View.GONE
+                },
+                item.hasMail.subscribe { hasMail ->
+                    mailImage.visibility = if (hasMail) View.VISIBLE else View.GONE
+                },
+                item.photoUri.subscribe { _ ->
+                    item.getPhoto().subscribe { bitmap ->
+                        imageView.setImageBitmap(bitmap)
+                    }
                 })
     }
 }
@@ -101,7 +105,7 @@ class ContactsViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private var textView: TextView = view.findViewById(R.id.grid_section_title)
 
-    fun bindItem(item : RecyclerItemCategory) {
+    fun bindItem(item : CategoryItemViewModel) {
         textView.text = item.categoryName
     }
 }

@@ -7,10 +7,9 @@ import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds
 import jp.studio.edamame.contacts.ContactsApplication
 import android.util.Log
-import jp.studio.edamame.contacts.entities.Contact
-import jp.studio.edamame.contacts.entities.MailAddress
-import jp.studio.edamame.contacts.entities.Phone
-import timber.log.Timber
+import jp.studio.edamame.contacts.entities.ContactEntity
+import jp.studio.edamame.contacts.entities.MailEntity
+import jp.studio.edamame.contacts.entities.PhoneEntity
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 
@@ -36,7 +35,7 @@ class ContactsProvider {
 
         private var sortOrder = ContactsContract.Contacts.SORT_KEY_PRIMARY
 
-        fun queryAll() : MutableList<Contact> {
+        fun queryAll() : MutableList<ContactEntity> {
             val application = ContactsApplication.getApp()
 
             var cursor = application.contentResolver.query(
@@ -58,12 +57,12 @@ class ContactsProvider {
 
             val photoIdx = cursor.getColumnIndex(ContactsContract.Contacts.PHOTO_URI)
 
-            val contactMap: MutableMap<Long, Contact> = mutableMapOf()
+            val contactEntityMap: MutableMap<Long, ContactEntity> = mutableMapOf()
 
             while(cursor.moveToNext()) {
                 val id = cursor.getLong(idIdx)
                 val photoUri = cursor.getString(photoIdx) ?: ""
-                contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx), photoUri)
+                contactEntityMap[id] = ContactEntity(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx), photoUri)
             }
             cursor.close()
 
@@ -92,30 +91,30 @@ class ContactsProvider {
                 val type = cursor.getInt(typeIdx)
 
                 val contact =
-                        if (contactMap.containsKey(id)) contactMap[id]!!
+                        if (contactEntityMap.containsKey(id)) contactEntityMap[id]!!
                         else {
-                            contactMap[id] = Contact(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx))
-                            contactMap[id]!!
+                            contactEntityMap[id] = ContactEntity(id, cursor.getString(nameIdx), cursor.getString(sortKeyIdx))
+                            contactEntityMap[id]!!
                         }
 
                 when (mimeType) {
                     CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> {
                         val typeLabel = ContactsContract.CommonDataKinds.Phone.getTypeLabel(res, type, "") as String
-                        val phone = Phone(cursor.getString(dataIdx), typeLabel)
+                        val phone = PhoneEntity(cursor.getString(dataIdx), typeLabel)
 
-                        contact.phoneList.add(phone)
+                        contact.phoneEntityList.add(phone)
                     }
 
                     CommonDataKinds.Email.CONTENT_ITEM_TYPE -> {
                         val typeLabel = ContactsContract.CommonDataKinds.Email.getTypeLabel(res, type, "") as String
-                        val emailAddress = MailAddress(cursor.getString(dataIdx), typeLabel)
+                        val emailAddress = MailEntity(cursor.getString(dataIdx), typeLabel)
 
-                        contact.mailList.add(emailAddress)
+                        contact.mailEntityList.add(emailAddress)
                     }
                 }
             }
 
-            return contactMap.values.sortedBy { it.displayName }.toMutableList()
+            return contactEntityMap.values.sortedBy { it.displayName }.toMutableList()
         }
 
         fun openPhoto(contactId: Long): InputStream? {

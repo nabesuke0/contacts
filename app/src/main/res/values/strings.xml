@@ -3,4 +3,6 @@
 
     <string name="permission_request_message">連絡先へのアクセスを許可していただかないとアプリを使用できません。</string>
     <string name="grid_item_contact_image">User Image</string>
+
+    <string name="local_intent_contact_name_changed">contact_name_changed</string>
 </resources>

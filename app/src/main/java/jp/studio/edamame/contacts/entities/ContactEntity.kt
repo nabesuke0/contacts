@@ -9,9 +9,9 @@ import jp.studio.edamame.contacts.provider.ContactsProvider
 /**
  * Created by Watanabe@Neopa on 2017/05/17.
  */
-class Contact(var id: Long, var displayName: String, var sortKey : String, var photoUri: String = "") {
-    val phoneList: MutableList<Phone> = mutableListOf()
-    val mailList: MutableList<MailAddress> = mutableListOf()
+class ContactEntity(var id: Long, var displayName: String, var sortKey : String, var photoUri: String = "") {
+    val phoneEntityList: MutableList<PhoneEntity> = mutableListOf()
+    val mailEntityList: MutableList<MailEntity> = mutableListOf()
 
     private var photo: Bitmap? = null
 

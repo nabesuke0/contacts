@@ -1,53 +1,52 @@
 package jp.studio.edamame.contacts.views.all
 
-import jp.studio.edamame.contacts.extensions.katakanaToHiragana
-import jp.studio.edamame.contacts.entities.Contact
-import jp.studio.edamame.contacts.provider.ContactsProvider
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.subjects.BehaviorSubject
+import jp.studio.edamame.contacts.models.Contact
+import jp.studio.edamame.contacts.models.ContactsModel
 
 /**
  * Created by Watanabe on 2017/05/16.
  */
-class AllContactsViewModel {
-    private val contacts: MutableList<Contact> = ContactsProvider.queryAll()
-    val viewItems : MutableList<ContactsRecyclerItemable> = mutableListOf()
+class AllContactsViewModel(private var contactModels: BehaviorSubject<MutableList<Contact>>) {
+
+    val viewItems : BehaviorSubject<MutableList<ContactsRecyclerItemable>> = BehaviorSubject.create()
+    private val disposable: CompositeDisposable = CompositeDisposable()
 
     init {
-        val mutableMap = mutableMapOf<Int, MutableMap<String, MutableList<Contact>>>()
-        contacts.forEach { contact ->
-            var sortKey = contact.sortKey.substring(0..0)
-            val categoryPair = this.distributeKey(sortKey)
+        disposable.add(
+                contactModels.subscribe { models ->
+                    val mutableMap = mutableMapOf<Int, MutableMap<String, MutableList<Contact>>>()
+                    models.forEach { contact ->
+                        var sortKey = contact.rx_sortKey.value.substring(0..0)
+                        val categoryPair = ContactsModel.distributeKey(sortKey)
 
-            val sortOrderPrimary = categoryPair.first
-            val categoryKey = categoryPair.second
+                        val sortOrderPrimary = categoryPair.first
+                        val categoryKey = categoryPair.second
 
-            if (mutableMap[sortOrderPrimary] == null) {
-                mutableMap[sortOrderPrimary] = mutableMapOf()
-            }
+                        if (mutableMap[sortOrderPrimary] == null) {
+                            mutableMap[sortOrderPrimary] = mutableMapOf()
+                        }
 
-            if (!mutableMap[sortOrderPrimary]!!.containsKey(categoryKey)) {
-                mutableMap[sortOrderPrimary]!!.put(categoryKey, mutableListOf())
-            }
+                        if (!mutableMap[sortOrderPrimary]!!.containsKey(categoryKey)) {
+                            mutableMap[sortOrderPrimary]!!.put(categoryKey, mutableListOf())
+                        }
 
-            mutableMap[sortOrderPrimary]!![categoryKey]!!.add(contact)
-        }
+                        mutableMap[sortOrderPrimary]!![categoryKey]!!.add(contact)
+                    }
 
-        mutableMap.toSortedMap().values.forEach {
-            it.toSortedMap().forEach { (k, v) ->
-                viewItems.add(RecyclerItemCategory(k))
-                v.forEach {
-                    viewItems.add(RecyclerItemContact(it))
+                    val sortedList: MutableList<ContactsRecyclerItemable> = mutableListOf()
+                    mutableMap.toSortedMap().values.forEach {
+                        it.toSortedMap().forEach { (k, v) ->
+                            sortedList.add(CategoryItemViewModel(k))
+                            v.forEach {
+                                sortedList.add(ContactThumbnailViewModel(it))
+                            }
+                        }
+                    }
+
+                    viewItems.onNext(sortedList)
                 }
-            }
-        }
-    }
-
-    private fun distributeKey(key : String) : Pair<Int, String> {
-        return when {
-            key.length > 1 -> Pair(99, "#") // 2文字以上は不正
-            key.matches(Regex("[0-9a-zA-Z]+")) -> Pair(10, key) // アルファベット
-            key.matches(Regex("^[\\u3040-\\u309F]+$")) -> Pair(0, key) // ひらがな
-            key.matches(Regex("^[\\\\u30A0-\\\\u30FF]+\$")) -> Pair(0, key.katakanaToHiragana()) // カタカナはひらがなに変換して返す
-            else -> Pair(99, "#") // 読み仮名が漢字などその他のものは全て#で返す
-        }
+        )
     }
 }
