@@ -32,15 +32,17 @@
             android:background="@android:color/holo_blue_light"
             android:layout_toEndOf="@+id/grid_item_horizontal_center"
             android:orientation="vertical">
-            <TextView
+            <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/grid_item_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
-                android:textSize="15sp"
+                android:textSize="13sp"
+                android:lines="1"
                 android:text=""
+                app:autoSizeTextType="uniform"
                 />
         </LinearLayout>
 
