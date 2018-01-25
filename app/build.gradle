@@ -51,8 +51,13 @@ dependencies {
     // layout
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.android.support:percent:26.1.0'
+
+    // rx property
+//    compile 'com.github.k-kagurazaka.rx-property-android:rx-property:4.0.0'
+//    compile 'com.github.k-kagurazaka.rx-property-android:rx-property-kotlin:4.0.0'
 }
 
 repositories {
     mavenCentral()
+//    maven { url "https://jitpack.io" }
 }

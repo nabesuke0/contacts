@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.tbruyelle.rxpermissions2.RxPermissions
+import jp.studio.edamame.contacts.models.ContactsModel
 import jp.studio.edamame.contacts.views.all.AllContactsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -17,6 +18,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         this.rxPermission = RxPermissions(this)
+
+        val pagerAdapter = ContactsPagerAdapter(supportFragmentManager)
+        pagerAdapter.addFragment(AllContactsFragment())
+
+        main_viewpager.adapter = pagerAdapter
+        main_tab.setupWithViewPager(main_viewpager)
     }
 
     override fun onResume() {
@@ -28,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { granted ->
                             if (granted) {
-                                this.initializeTabFragments()
+                                ContactsApplication.getApp().contactsModel.update()
                             } else {
                                 this.showConfirmationDialog()
                             }
@@ -37,14 +44,6 @@ class MainActivity : AppCompatActivity() {
                             Timber.e(it)
                         }
                 )
-    }
-
-    private fun initializeTabFragments() {
-        val pagerAdapter = ContactsPagerAdapter(supportFragmentManager)
-        pagerAdapter.addFragment(AllContactsFragment())
-
-        main_viewpager.adapter = pagerAdapter
-        main_tab.setupWithViewPager(main_viewpager)
     }
 
     private fun showConfirmationDialog() {

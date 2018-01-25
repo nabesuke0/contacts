@@ -1,6 +1,7 @@
 package jp.studio.edamame.contacts
 
 import android.app.Application
+import io.reactivex.subjects.BehaviorSubject
 import jp.studio.edamame.contacts.models.ContactsModel
 import timber.log.Timber
 
@@ -16,9 +17,7 @@ class ContactsApplication : Application() {
     }
 
 
-    val contactsModel: ContactsModel by lazy {
-        ContactsModel()
-    }
+    var contactsModel: ContactsModel = ContactsModel()
 
     override fun onCreate() {
         super.onCreate()
@@ -29,7 +28,5 @@ class ContactsApplication : Application() {
         }
 
         ContactsApplication.self = this
-
-        this.contactsModel
     }
 }

@@ -16,7 +16,7 @@ class ContactThumbnailViewModel(private var rxcontact: Contact) : ContactsRecycl
 
     val disposable: CompositeDisposable = CompositeDisposable()
 
-    var id: BehaviorSubject<Long> = rxcontact.id
+    var rx_id: BehaviorSubject<Long> = rxcontact.id
     var rx_displayName: BehaviorSubject<String> = rxcontact.displayName
     var hasPhoneNumber: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
     var hasMail: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
@@ -38,7 +38,7 @@ class ContactThumbnailViewModel(private var rxcontact: Contact) : ContactsRecycl
 
     fun getPhoto() : Maybe<Bitmap> {
         return Maybe.create { emitter ->
-            ContactsProvider.openPhoto(this.id.value)?.let {
+            ContactsProvider.openPhoto(this.rx_id.value)?.let {
                 val photo = BitmapFactory.decodeStream(it)
                 emitter.onSuccess(photo)
 

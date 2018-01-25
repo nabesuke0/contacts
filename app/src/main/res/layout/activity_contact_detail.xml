@@ -1,72 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="jp.studio.edamame.contacts.views.detail.ContactDetailActivity"
-    android:background="@color/transparent">
+    android:orientation="vertical">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/contact_detail_layout_header"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp">
-            <ImageView
-                android:id="@+id/contact_detail_photo"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintHorizontal_weight="0.5"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/contact_detail_name_layout"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/user_icon_default"/>
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
             <android.support.constraint.ConstraintLayout
-                android:id="@+id/contact_detail_name_layout"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintHorizontal_weight="0.5"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/contact_detail_photo"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/contact_detail_name_text"
+                android:id="@+id/contact_detail_layout_header"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@color/contact_detail_header_background">
+                <ImageView
+                    android:id="@+id/contact_detail_photo"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="20dp"
+                    app:layout_constraintHorizontal_weight="0.4"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintVertical_weight="0.5"
+                    app:layout_constraintEnd_toStartOf="@+id/contact_detail_name_layout"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/contact_detail_name_text_kana"
-                    android:gravity="center"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform"
-                    android:text="てすとてすと"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/user_icon_default"
+                    android:contentDescription="@string/image_description_user_icon"/>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/contact_detail_name_text_kana"
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/contact_detail_name_layout"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginStart="20dp"
-                    app:layout_constraintVertical_weight="0.5"
-                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintHorizontal_weight="0.6"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/contact_detail_name_text"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:gravity="center"
-                    app:autoSizeMaxTextSize="20sp"
-                    app:autoSizeTextType="uniform"
-                    android:text="あいうえお"/>
+                    app:layout_constraintLeft_toRightOf="@+id/contact_detail_photo"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent">
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/contact_detail_name_text"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginEnd="20dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintVertical_weight="0.5"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/contact_detail_name_text_kana"
+                        android:gravity="center"
+                        app:autoSizeMaxTextSize="20sp"
+                        app:autoSizeTextType="uniform"
+                        android:text=""/>
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/contact_detail_name_text_kana"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="20dp"
+                        app:layout_constraintVertical_weight="0.5"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/contact_detail_name_text"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:gravity="center"
+                        app:autoSizeMaxTextSize="20sp"
+                        app:autoSizeTextType="uniform"
+                        android:text=""/>
+
+                </android.support.constraint.ConstraintLayout>
             </android.support.constraint.ConstraintLayout>
-        </android.support.constraint.ConstraintLayout>
-    </LinearLayout>
-</ScrollView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
+            <LinearLayout
+                android:id="@+id/contact_detail_phone_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"
+                    android:text="@string/contact_detail_tel_text"
+                    android:textColor="@android:color/black"
+                    android:background="@color/contact_detail_category_background"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/contact_detail_mail_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"
+                    android:text="@string/contact_detail_mail_text"
+                    android:textColor="@android:color/black"
+                    android:background="@color/contact_detail_category_background"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/contact_detail_other_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:gravity="center_vertical"
+                    android:textSize="15sp"
+                    android:text="@string/contact_detail_other_text"
+                    android:textColor="@android:color/black"
+                    android:background="@color/contact_detail_category_background"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

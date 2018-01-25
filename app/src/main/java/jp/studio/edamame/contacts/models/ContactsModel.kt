@@ -1,5 +1,8 @@
 package jp.studio.edamame.contacts.models
 
+import io.reactivex.Scheduler
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import jp.studio.edamame.contacts.extensions.katakanaToHiragana
 import jp.studio.edamame.contacts.provider.ContactsProvider
@@ -8,9 +11,7 @@ import jp.studio.edamame.contacts.provider.ContactsProvider
  * Created by Watanabe on 2018/01/23.
  */
 class ContactsModel {
-    var contactModels: BehaviorSubject<MutableList<Contact>> = BehaviorSubject.createDefault(ContactsProvider.queryAll().map {
-        Contact(it)
-    }.toMutableList())
+    var contactModels: BehaviorSubject<MutableList<Contact>> = BehaviorSubject.create()
 
     companion object {
         fun distributeKey(key : String) : Pair<Int, String> {
@@ -52,5 +53,18 @@ class ContactsModel {
 
             return sortedMap
         }
+    }
+
+    fun update() {
+        ContactsProvider.rx_queryAll()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { contacts ->
+                    contactModels.onNext(
+                            contacts.map {
+                                Contact(it)
+                            }.toMutableList()
+                    )
+                }
     }
 }

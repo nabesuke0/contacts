@@ -1,6 +1,8 @@
 package jp.studio.edamame.contacts.views.all
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import jp.studio.edamame.contacts.ContactsApplication
 import jp.studio.edamame.contacts.R
 import jp.studio.edamame.contacts.views.ViewPagerFragment
+import jp.studio.edamame.contacts.views.detail.ContactDetailActivity
 import kotlinx.android.synthetic.main.fragment_allcontacts.*
 import timber.log.Timber
 
@@ -15,8 +18,8 @@ import timber.log.Timber
  * Created by Watanabe on 2017/05/16.
  */
 class AllContactsFragment: ViewPagerFragment() {
-    lateinit var viewModel: AllContactsViewModel
-    private  val disposable = CompositeDisposable()
+    private lateinit var viewModel: AllContactsViewModel
+    private val disposable = CompositeDisposable()
 
     override fun getTitle(): String {
         return "全ての連絡先"
@@ -41,6 +44,10 @@ class AllContactsFragment: ViewPagerFragment() {
         disposable.add(viewModel.viewItems.subscribe { items ->
             val adapter = AllContactsAdapter(items, this.context) { selectedItem ->
                 Timber.d("item name = %s", selectedItem.rx_displayName.value)
+
+                val intent = Intent(this.activity, ContactDetailActivity::class.java)
+                intent.putExtra(ContactDetailActivity.INTENT_KEY_CONTACT_ID, selectedItem.rx_id.value)
+                startActivity(intent)
             }
 
             allcontacts_grid.layoutManager = adapter.gridLayoutManager
@@ -48,7 +55,8 @@ class AllContactsFragment: ViewPagerFragment() {
         })
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposable.dispose()
     }
 }

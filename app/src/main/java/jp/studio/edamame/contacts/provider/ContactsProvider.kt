@@ -7,6 +7,7 @@ import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds
 import jp.studio.edamame.contacts.ContactsApplication
 import android.util.Log
+import io.reactivex.Single
 import jp.studio.edamame.contacts.entities.ContactEntity
 import jp.studio.edamame.contacts.entities.MailEntity
 import jp.studio.edamame.contacts.entities.PhoneEntity
@@ -34,6 +35,12 @@ class ContactsProvider {
                 ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
 
         private var sortOrder = ContactsContract.Contacts.SORT_KEY_PRIMARY
+
+        fun rx_queryAll() : Single<MutableList<ContactEntity>> {
+            return Single.create { emitter ->
+                emitter.onSuccess(this.queryAll())
+            }
+        }
 
         fun queryAll() : MutableList<ContactEntity> {
             val application = ContactsApplication.getApp()
