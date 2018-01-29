@@ -1,7 +1,7 @@
 package jp.studio.edamame.contacts.models
 
-import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import jp.studio.edamame.contacts.extensions.katakanaToHiragana
@@ -11,7 +11,10 @@ import jp.studio.edamame.contacts.provider.ContactsProvider
  * Created by Watanabe on 2018/01/23.
  */
 class ContactsModel {
-    var contactModels: BehaviorSubject<MutableList<Contact>> = BehaviorSubject.create()
+    private var isEnableAccessContacts: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
+    private val disposable: CompositeDisposable = CompositeDisposable()
+
+    val contactModels: BehaviorSubject<MutableList<Contact>> = BehaviorSubject.create()
 
     companion object {
         fun distributeKey(key : String) : Pair<Int, String> {
@@ -55,7 +58,17 @@ class ContactsModel {
         }
     }
 
-    fun update() {
+    init {
+        disposable.add(isEnableAccessContacts.filter { it }.subscribe {
+            this.updateContacts()
+        })
+    }
+
+    fun accessContactsState(isEnable: Boolean) {
+        isEnableAccessContacts.onNext(isEnable)
+    }
+
+    fun updateContacts() {
         ContactsProvider.rx_queryAll()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

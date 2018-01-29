@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import com.tbruyelle.rxpermissions2.RxPermissions
-import jp.studio.edamame.contacts.models.ContactsModel
 import jp.studio.edamame.contacts.views.all.AllContactsFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe(
                         { granted ->
                             if (granted) {
-                                ContactsApplication.getApp().contactsModel.update()
+                                ContactsApplication.getApp().contactsModel.accessContactsState(granted)
                             } else {
                                 this.showConfirmationDialog()
                             }
