@@ -8,16 +8,16 @@ import jp.studio.edamame.contacts.entities.ContactEntity
  * Created by Watanabe on 2018/01/23.
  */
 class Contact(private var contactEntity: ContactEntity) {
-    var id: BehaviorSubject<Long> = BehaviorSubject.createDefault(contactEntity.id)
-    var displayName: BehaviorSubject<String> = BehaviorSubject.createDefault(contactEntity.displayName)
+    var rx_id: BehaviorSubject<Long> = BehaviorSubject.createDefault(contactEntity.id)
+    var rx_displayName: BehaviorSubject<String> = BehaviorSubject.createDefault(contactEntity.displayName)
     var rx_sortKey: BehaviorSubject<String> = BehaviorSubject.createDefault(contactEntity.sortKey)
-    var photoUri: BehaviorSubject<String> = BehaviorSubject.createDefault(contactEntity.photoUri)
-    val phoneList: BehaviorSubject<MutableList<Phone>> = BehaviorSubject.createDefault(
+    var rx_photoUri: BehaviorSubject<String> = BehaviorSubject.createDefault(contactEntity.photoUri)
+    val rx_phoneList: BehaviorSubject<MutableList<Phone>> = BehaviorSubject.createDefault(
             contactEntity.phoneEntityList.map {
                 Phone(it)
             }.toMutableList()
     )
-    val mailList: BehaviorSubject<MutableList<Mail>> = BehaviorSubject.createDefault(
+    val rx_mailList: BehaviorSubject<MutableList<Mail>> = BehaviorSubject.createDefault(
             contactEntity.mailEntityList.map {
                 Mail(it)
             }.toMutableList()

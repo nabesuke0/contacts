@@ -8,7 +8,7 @@ import jp.studio.edamame.contacts.models.ContactsModel
 /**
  * Created by Watanabe on 2017/05/16.
  */
-class AllContactsViewModel(private var contactModels: BehaviorSubject<MutableList<Contact>>) {
+class AllContactsViewModel(contactModels: BehaviorSubject<MutableList<Contact>>) {
 
     val viewItems : BehaviorSubject<MutableList<ContactsRecyclerItemable>> = BehaviorSubject.create()
     private val disposable: CompositeDisposable = CompositeDisposable()

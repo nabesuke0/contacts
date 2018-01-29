@@ -16,18 +16,18 @@ class ContactThumbnailViewModel(private var rxcontact: Contact) : ContactsRecycl
 
     val disposable: CompositeDisposable = CompositeDisposable()
 
-    var rx_id: BehaviorSubject<Long> = rxcontact.id
-    var rx_displayName: BehaviorSubject<String> = rxcontact.displayName
+    var rx_id: BehaviorSubject<Long> = rxcontact.rx_id
+    var rx_displayName: BehaviorSubject<String> = rxcontact.rx_displayName
     var hasPhoneNumber: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
     var hasMail: BehaviorSubject<Boolean> = BehaviorSubject.createDefault(false)
-    var photoUri: BehaviorSubject<String> = rxcontact.photoUri
+    var photoUri: BehaviorSubject<String> = rxcontact.rx_photoUri
 
     init {
-        disposable.add(rxcontact.phoneList.subscribe { list ->
+        disposable.add(rxcontact.rx_phoneList.subscribe { list ->
             hasPhoneNumber.onNext(list.count() > 0)
         })
 
-        disposable.add(rxcontact.mailList.subscribe { list ->
+        disposable.add(rxcontact.rx_mailList.subscribe { list ->
             hasMail.onNext(list.count() > 0)
         })
     }

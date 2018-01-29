@@ -92,6 +92,9 @@ class ContactsProvider {
             val dataIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.DATA)
             val typeIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Contactables.TYPE)
 
+//            Log.e("ContactsProvider", DatabaseUtils.dumpCursorToString(cursor))
+
+
             while(cursor.moveToNext()) {
                 val id = cursor.getLong(idIdx)
                 val mimeType = cursor.getString(mimeTypeIdx)

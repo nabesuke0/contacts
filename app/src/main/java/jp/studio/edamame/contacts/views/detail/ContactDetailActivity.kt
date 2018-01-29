@@ -15,9 +15,11 @@ class ContactDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_contact_detail)
 
-//        this.setSupportActionBar(contact_detail_toolbar)
         this.supportActionBar?.setHomeAsUpIndicator(R.drawable.close)
         this.supportActionBar?.setHomeButtonEnabled(true)
+
+        val contactId = intent.getStringExtra(INTENT_KEY_CONTACT_ID)
+
     }
 
 }
