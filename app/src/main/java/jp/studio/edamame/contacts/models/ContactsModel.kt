@@ -21,9 +21,40 @@ class ContactsModel {
             return when {
                 key.length > 1 -> Pair(99, "#") // 2文字以上は不正
                 key.matches(Regex("[0-9a-zA-Z]+")) -> Pair(10, key) // アルファベット
-                key.matches(Regex("^[\\u3040-\\u309F]+$")) -> Pair(0, key) // ひらがな
-                key.matches(Regex("^[\\\\u30A0-\\\\u30FF]+\$")) -> Pair(0, key.katakanaToHiragana()) // カタカナはひらがなに変換して返す
+                key.matches(Regex("^[\\u3040-\\u309F]+$")) -> Pair(0, distributeKanaRow(key)) // ひらがな
+                key.matches(Regex("^[\\\\u30A0-\\\\u30FF]+\$")) ->
+                    Pair(0, distributeKanaRow(key.katakanaToHiragana())) // カタカナはひらがなに変換して返す
                 else -> Pair(99, "#") // 読み仮名が漢字などその他のものは全て#で返す
+            }
+        }
+
+        fun phoneLabelBySortKey(sortKey: String): String {
+            val keyChar = sortKey.substring(0..0)
+            return when {
+                keyChar.matches(Regex("[0-9a-zA-Z]+")) -> keyChar
+                keyChar.matches(Regex("^[\\u3040-\\u309F]+$")) -> distributeKanaRow(keyChar)
+                keyChar.matches(Regex("^[\\\\u30A0-\\\\u30FF]+\$")) -> distributeKanaRow(keyChar.katakanaToHiragana())
+                else -> "#"
+            }
+        }
+
+        /**
+         * @see <https://en.wikipedia.org/wiki/Hiragana_%28Unicode_block%29>
+         */
+        private fun distributeKanaRow(kana: String): String {
+            return when {
+                kana.length > 1  -> throw Exception(Throwable("One character restriction"))
+                kana.matches(Regex("^[\\u3040-\\u304A]+$")) -> "あ"
+                kana.matches(Regex("^[\\u304B-\\u3054]+$")) -> "か"
+                kana.matches(Regex("^[\\u3055-\\u305E]+$")) -> "さ"
+                kana.matches(Regex("^[\\u305F-\\u3069]+$")) -> "た"
+                kana.matches(Regex("^[\\u306A-\\u306E]+$")) -> "な"
+                kana.matches(Regex("^[\\u306F-\\u307D]+$")) -> "は"
+                kana.matches(Regex("^[\\u307E-\\u3082]+$")) -> "ま"
+                kana.matches(Regex("^[\\u3083-\\u3088]+$")) -> "や"
+                kana.matches(Regex("^[\\u3089-\\u308D]+$")) -> "ら"
+                kana.matches(Regex("^[\\u308E-\\u3093]+$")) -> "わ"
+                else -> "#"
             }
         }
 
